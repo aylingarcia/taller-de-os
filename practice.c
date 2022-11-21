@@ -1,11 +1,9 @@
-#include <dirent.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <stdarg.h>
-#include <unistd.h>
 
 #define MEMORY_SIZE 12
+
+int processList[MEMORY_SIZE] = {0};
 
 /** Colors to print on console **/
 void reset () {
@@ -33,41 +31,58 @@ int clearConsole() {
 }
 
 /*
+ * Function to add new process 
+ */
+int addProcess() {
+	//@TODO: implement agregation
+	processList[0] = 1;
+}
+
+/*
+ * Function to add new process 
+ */
+int showMemory() {
+	int i;
+
+	for(i = 0; i < MEMORY_SIZE; i++) {
+		printf("position: %d, value: %d\n", i+1, processList[i]);
+	}
+}
+
+/*
  * Function to show manual
  */
 int showManual() {
 	printf(
+		"0) ➛ Exit\n"
 		"1) ➛ Generate rambom process\n"
 		"2) ➛ Finish process\n"
 		"3) ➛ Compact processes\n"
 		"4) ➛ Show process table\n"
-		"0) ➛ Exit\n"
+		"5) ➛ Show memory\n"
 	);
 }
 
 int main(void) {
-	char inputLine[50];
 	int option, extra;
+	
 
 	while(1) {
-		char name[25];
-
 		showManual();
 		printCyan("Please enter an option: ");
 
-		// scanf("%d", &option);
 		option = getchar();
-		// sprintf(name, "Process Nro. %d", option);
+
 		if(option == '\n') continue;
 		while((extra = getchar()) != '\n') { }
 
 		if(option != '\n') {
 			if(option == '0')
 				exit(EXIT_SUCCESS);
-			else if(option == '2')
-				clearConsole();
-			else if(option == '3')
-				clearConsole(); 
+			else if(option == '1')
+				addProcess();
+			else if(option == '5')
+				showMemory(); 
 			else if(option == '4')
 				clearConsole(); 
 			else if(option == '5')
