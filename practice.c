@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include <time.h>
 #include <stdlib.h>
+#include <math.h>
 
-#define MEMORY_SIZE 12
+#define MEMORY_SIZE 20
 
-int processList[MEMORY_SIZE] = {0};
+int memory[MEMORY_SIZE] = {0};
 
 /** Colors to print on console **/
 void reset () {
@@ -30,22 +32,59 @@ int clearConsole() {
 	printf("\e[1;1H\e[2J");
 }
 
-/*
- * Function to add new process 
- */
-int addProcess() {
-	//@TODO: implement agregation
-	processList[0] = 1;
+int getFreeSpace() {
+	int i, free = 0;
+
+	for(i = MEMORY_SIZE - 1; i >= 0; i--) {
+		if(memory[i] == 0) free++;
+		else break;
+	}
+
+
+	return free;
 }
 
 /*
  * Function to add new process 
  */
+int addProcess() {
+	int processSize = rand() % 10;  
+	if(processSize == 0) processSize = 1;
+
+	int freeSize = getFreeSpace();
+
+	//printf("free: %d \n", freeSize);
+
+	if(freeSize >= processSize) {
+		int i, start = MEMORY_SIZE - freeSize, end = start + processSize;
+
+		for(i = start; i < end; i++) {
+			memory[i] = processSize;
+		}
+	} else {
+		printCyan("\n\n\nNo have memory space\n\n\n");
+	}
+}
+
+/*
+ * Function to add  
+ */
 int showMemory() {
 	int i;
 
 	for(i = 0; i < MEMORY_SIZE; i++) {
-		printf("position: %d, value: %d\n", i+1, processList[i]);
+		printf("position: %d, value: %d\n", i+1, memory[i]);
+	}
+}
+
+/*
+ * Function to add  
+ */
+int compactMemory() {
+	int i;
+
+	for(i = 0; i < MEMORY_SIZE; i++) {
+		printf("position: %d, value: %d\n", i+1, memory[i]);
 	}
 }
 
@@ -63,9 +102,28 @@ int showManual() {
 	);
 }
 
+/*
+ * Function to show manual
+ */
+void terminateProcess() {
+	int option, extra;
+
+	printCyan("Enter the pid: ");
+
+	option = getchar();
+
+	if(option == '\n') return;
+	while((extra = getchar()) != '\n') { }
+
+	for(i = 0; i < MEMORY_SIZE; i++) {
+		printf("position: %d, value: %d\n", i+1, memory[i]);
+	}
+}
+
 int main(void) {
 	int option, extra;
-	
+
+	srand(time(NULL));
 
 	while(1) {
 		showManual();
@@ -81,12 +139,12 @@ int main(void) {
 				exit(EXIT_SUCCESS);
 			else if(option == '1')
 				addProcess();
-			else if(option == '5')
-				showMemory(); 
+			else if(option == '2')
+				terminateProcess();
+			else if(option == '3')
+				compactMemory(); 
 			else if(option == '4')
-				clearConsole(); 
-			else if(option == '5')
-				showManual();
+				showMemory(); 
 			else
 				printRed(
 					"** Invalid option *** \n\n"
