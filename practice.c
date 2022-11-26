@@ -1,3 +1,6 @@
+/*
+* compile: gcc practice.c -o exc && ./exc
+*/
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
@@ -20,7 +23,6 @@ typedef struct {
   size_t used;
   size_t size;
 } Array;
-
 
 /*
  * Global variables
@@ -192,7 +194,7 @@ int addProcess() {
 		reset();
 	} else {
 		yellow();
-		printf("\nWe no have enough memory space: %d(u)\n\n", processSize);
+		printf("\nWe no have enough memory space: %d(um)\n\n", processSize);
 		reset();
 	}
 }
@@ -275,15 +277,15 @@ int main(void) {
   initArray(&processTable, 10);
 	srand(time(NULL));
 
+	memory[0] = -1;
+	memory[1] = -1;
+
 	showManual();
 	while(1) {
 		printCyan("Please enter an option: ");
 
 		option = getchar();
 		
-		memory[0] = -1;
-		memory[1] = -1;
-
 		if(option == '\n') continue;
 		while((extra = getchar()) != '\n') { }
 
